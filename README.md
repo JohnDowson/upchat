@@ -6,12 +6,13 @@ Build the docker image:
 ```sh
 $ docker-compose build
 ```
-Compile assets:
+Compile assets and setup the database:
 
 ```sh
-$ docker-compose run -it app rails assets:precompile
+$ docker-compose run app rails assets:precompile
+$ docker-compose run app rails db:prepare
 ```
 Start the service:
 ```sh
-$ docker-compose run -d
+$ docker-compose up -d
 ```
