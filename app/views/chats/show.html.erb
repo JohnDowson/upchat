@@ -1,0 +1,25 @@
+<style>
+    .msg-<%=current_user.id%> {
+        display: flex;
+        align-self: flex-end !important;
+        position: relative;
+        background-color: #5555ff !important;
+    }
+</style>
+
+<%= render partial: "/nav", locals: { text: "You are Upchatting to #{@other_user.name}" } %>
+
+<div class="p-2">
+  <div class="chat-container overflow-scroll" id="messages">
+    <%= turbo_stream_from "messages_#{@chat.id}" %>
+    <% @chat.messages.each do |m| %>
+      <%= render partial: "messages/message", locals: { message: m, user: current_user } %>
+    <% end%>
+  </div>
+  <div>
+    <%= form_with url: messages_path(chat_id: @chat.id), remote: true, class: "d-flex", data: { controller: "message-form" }  do |f| %>
+      <%= f.text_field :content, class: "form-control" %>
+      <%= f.submit "Submit", class: "btn btn-primary", data: { disable_with: false } %>
+    <% end %>
+  </div>
+</div>

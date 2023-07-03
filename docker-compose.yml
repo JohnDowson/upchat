@@ -1,0 +1,25 @@
+version: "3.9"
+services:
+  redis:
+    image: 'redis:5-alpine'
+    command: redis-server
+    ports:
+      - '6379:6379'
+  postgres:
+    image: 'postgres:15-alpine'
+    environment:
+      POSTGRES_DB: "upchatdb"
+      POSTGRES_USER: "upchatuser"
+      POSTGRES_HOST_AUTH_METHOD: "trust"
+    ports:
+      - "5432:5432"
+  app:
+    build: .
+    command: bundle exec rails s -b '0.0.0.0' -p 3000
+    depends_on:
+      - redis
+      - postgres
+    volumes:
+      - .:/app
+    ports:
+      - "3000:3000"

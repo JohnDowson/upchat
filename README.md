@@ -1,24 +1,17 @@
 # README
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+## Deployment instructions
 
-Things you may want to cover:
+Build the docker image:
+```sh
+$ docker-compose build
+```
+Compile assets:
 
-* Ruby version
-
-* System dependencies
-
-* Configuration
-
-* Database creation
-
-* Database initialization
-
-* How to run the test suite
-
-* Services (job queues, cache servers, search engines, etc.)
-
-* Deployment instructions
-
-* ...
+```sh
+$ docker-compose run -it app rails assets:precompile
+```
+Start the service:
+```sh
+$ docker-compose run -d
+```
