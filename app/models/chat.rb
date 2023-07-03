@@ -5,8 +5,7 @@ class Chat < ApplicationRecord
   validate :users_are_distinct_and_there_are_two_of_them
 
   def users_are_distinct_and_there_are_two_of_them
-    set = Set.new
-    valid = users.map { |u| u.id }.none? { |u| !set.add? u } && set.count == 2
+    valid = users.uniq.count == 2
     errors.add(:users, message: "must have at least two unique ones") unless valid
   end
 end

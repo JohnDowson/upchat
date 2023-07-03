@@ -10,9 +10,9 @@
 <%= render partial: "/nav", locals: { text: "You are Upchatting to #{@other_user.name}" } %>
 
 <div class="p-2">
-  <div class="chat-container overflow-scroll" id="messages">
+  <div class="chat-container" id="messages">
     <%= turbo_stream_from "messages_#{@chat.id}" %>
-    <% @chat.messages.each do |m| %>
+    <% @messages.each do |m| %>
       <%= render partial: "messages/message", locals: { message: m, user: current_user } %>
     <% end%>
   </div>
