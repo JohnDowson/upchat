@@ -2,6 +2,8 @@
 
 one:
   chat: one
+  user: foo
 
 two:
-  chat: two
+  chat: one
+  user: bar

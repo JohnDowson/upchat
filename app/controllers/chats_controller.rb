@@ -1,5 +1,6 @@
 class ChatsController < ApplicationController
-  before_action :set_chat, only: %i[ show edit update destroy ]
+  before_action :authenticate_user!, only: %i[ create get_or_create show ]
+  before_action :set_chat, only: %i[ show ]
 
   # GET /chats or /chats.json
   def index
@@ -15,7 +16,7 @@ class ChatsController < ApplicationController
   def get_or_create
     @chat = (current_user.chats & User.find(params[:user_id]).chats).first
     if @chat
-      redirect_to action: :show, id: @chat.id
+      redirect_to chat_path(@chat)
     else
       params[:chat] = { users_id: params[:user_id] }
       create
@@ -29,7 +30,7 @@ class ChatsController < ApplicationController
     @chat = Chat.new(new_params)
 
     if @chat.save
-      redirect_to chat_url(@chat), notice: "Chat was successfully created."
+      redirect_to chat_path(@chat), notice: "Chat was successfully created."
     else
       redirect_to "/users", notice: "Error when creating chat: #{@chat.errors.full_messages.join}"
     end

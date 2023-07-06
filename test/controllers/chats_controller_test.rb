@@ -5,44 +5,28 @@ class ChatsControllerTest < ActionDispatch::IntegrationTest
     @chat = chats(:one)
   end
 
-  test "should get index" do
-    get chats_url
-    assert_response :success
-  end
-
-  test "should get new" do
-    get new_chat_url
-    assert_response :success
-  end
-
-  test "should create chat" do
-    assert_difference("Chat.count") do
-      post chats_url, params: { chat: { users_id: @chat.users_id } }
-    end
-
-    assert_redirected_to chat_url(Chat.last)
-  end
-
   test "should show chat" do
+    sign_in users(:foo)
     get chat_url(@chat)
     assert_response :success
   end
 
-  test "should get edit" do
-    get edit_chat_url(@chat)
-    assert_response :success
-  end
-
-  test "should update chat" do
-    patch chat_url(@chat), params: { chat: { users_id: @chat.users_id } }
-    assert_redirected_to chat_url(@chat)
-  end
-
-  test "should destroy chat" do
-    assert_difference("Chat.count", -1) do
-      delete chat_url(@chat)
+  test "creates chat with user when there isn't one" do
+    sign_in users(:foo)
+    bar = users(:bar)
+    Chat.destroy_all
+    assert_changes "Chat.count", from: 0, to: 1 do
+      get user_chat_url(user_id: bar.id)
+      id = Chat.first.id
+      assert_redirected_to chat_url(id:)
     end
+  end
 
-    assert_redirected_to chats_url
+  test "finds chat with user when there is one" do
+    sign_in users(:foo)
+    bar = users(:bar)
+    chat = chats(:one)
+    get user_chat_url(user_id: bar.id)
+    assert_redirected_to chat_url(id: chat.id)
   end
 end
